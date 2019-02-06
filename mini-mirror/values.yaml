@@ -108,6 +108,7 @@ endpoints:
     hosts:
       default: mini-mirror-api
       public: mini-mirror
+      internal: mini-mirror-int
     host_fqdn_override:
       default: null
     path:
@@ -118,6 +119,7 @@ endpoints:
       http:
         default: 8888
         public: 80
+        internal: 80
 
 network:
   api:
@@ -125,13 +127,22 @@ network:
     node_port:
       enabled: false
       port: 8888
+    ingress:
+      public: true
+      classes:
+        namespace: "nginx"
+        cluster: "nginx-cluster"
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
 
 manifests:
   configmap_bin: true
   configmap_etc: true
   deployment_mini_mirror: true
   helm_test: true
+  ingress: true
   job_image_repo_sync: true
+  service_ingress: true
   service_mini_mirror: true
 
 conf:
