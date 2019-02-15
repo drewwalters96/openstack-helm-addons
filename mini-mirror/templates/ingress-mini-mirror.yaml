@@ -15,7 +15,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
-{{- if and .Values.manifests.ingress .Values.network.api.ingress.public }}
-{{- $ingressOpts := dict "envAll" . "backendServiceType" "api" "backendPort" "api" -}}
-{{ $ingressOpts | include "helm-toolkit.manifests.ingress" }}
-{{- end }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: maas-ingress
+  creationTimestamp: 2019-02-15T20:19:07Z
+  generation: 1
+  name: mini-mirror-cluster-fqdn
+  namespace: ucp
+  resourceVersion: "9852"
+  selfLink: /apis/extensions/v1beta1/namespaces/ucp/ingresses/mini-mirror-cluster-fqdn
+  uid: f2977960-315e-11e9-9083-52540000a431
+spec:
+  rules:
+  - host: mini-mirror-nc.gate.local
+    http:
+      paths:
+      - backend:
+          serviceName: mini-mirror-int
+          servicePort: api
+        path: /
+status:
+  loadBalancer:
+    ingress:
+    - {}
